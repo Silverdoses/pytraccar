@@ -1,4 +1,5 @@
 sudo: required
+dist: xenial
 language: python
 
 python:
@@ -9,14 +10,30 @@ addons:
   mariadb: 10.3
 
 before_install:
-  - sudo apt-get update
+  - sudo add-apt-repository ppa:linuxuprising/java -y
+  - sudo apt-get update -q
+  - sudo apt install oracle-java10-installer -y
+  - sudo apt install oracle-java10-set-default -y
+
   - mysql -u root -e 'CREATE DATABASE traccar;'
   - mysql -u root -e "CREATE USER 'traccar'@'localhost' IDENTIFIED BY 'traccar';"
   - mysql -u root -e "GRANT ALL ON traccar.* TO 'traccar'@'localhost';"
 
 install:
+ - wget https://github.com/traccar/traccar/releases/download/v4.2/traccar-linux-64-4.2.zip
+ - unzip traccar-linux-64-4.2.zip
+ - sudo ./traccar.run
+ - wget https://raw.githubusercontent.com/Legacier/pytraccar/master/tests/traccar.xml
+ - sudo mv traccar.xml /opt/traccar/conf/
+
+ - cd /opt/traccar/
+ - java -jar tracker-server.jar conf/traccar.xml
+
  - pip install requests
  - pip install pytest
+
+before_script:
+ - cd ~
 
 script:
  - python -m pytest
