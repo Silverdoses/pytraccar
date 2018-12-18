@@ -24,6 +24,7 @@ install:
  - unzip traccar-linux-64-4.2.zip
  - sudo ./traccar.run
  - sudo mv traccar.xml /opt/traccar/conf/
+ - sudo /opt/traccar/jre/bin/java -jar tracker-server.jar conf/traccar.xml
 
  - pip install requests
  - pip install pytest
