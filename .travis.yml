@@ -12,8 +12,8 @@ addons:
 before_install:
   - sudo add-apt-repository ppa:linuxuprising/java -y
   - sudo apt-get update -q
-  - sudo apt install oracle-java10-installer -y
-  - sudo apt install oracle-java10-set-default -y
+  - sudo apt-get install oracle-java10-installer -y
+  - sudo apt-get install oracle-java10-set-default -y
 
   - mysql -u root -e 'CREATE DATABASE traccar;'
   - mysql -u root -e "CREATE USER 'traccar'@'localhost' IDENTIFIED BY 'traccar';"
