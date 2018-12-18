@@ -32,4 +32,4 @@ before_script:
  - sudo systemctl start traccar
 
 script:
- -
+ - python -m pytest
