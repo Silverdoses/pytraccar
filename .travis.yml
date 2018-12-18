@@ -1,0 +1,35 @@
+sudo: required
+language: python
+
+python:
+  - 3.5
+  - 3.6
+  - 3.7
+
+addons:
+  mariadb: 10.3
+
+before_install:
+  - sudo apt-get update
+
+  - mysql -u root -e 'CREATE DATABASE traccar;'
+  - mysql -u root -e "CREATE USER 'traccar'@'localhost' IDENTIFIED BY 'traccar';"
+  - mysql -u root -e "GRANT ALL ON traccar.* TO 'traccar'@'localhost';"
+
+install:
+ - wget https://raw.githubusercontent.com/Legacier/pytraccar/master/tests/traccar.xml
+ - wget https://github.com/traccar/traccar/releases/download/v4.2/traccar-linux-64-4.2.zip
+ - sudo mv traccar.xml /opt/traccar/conf/
+
+ - sudo apt-get install -y default-jdk
+ - unzip traccar-linux-64-4.2.zip
+ - sudo ./traccar.run
+
+ - pip install requests
+ - pip install pytest
+
+before_script:
+ - sudo systemctl start traccar
+
+script:
+ -
