@@ -3,6 +3,7 @@ dist: xenial
 language: python
 
 python:
+  - 2.7
   - 3.4
   - 3.5
   - 3.6
@@ -12,7 +13,7 @@ python:
 before_install:
   - sudo apt-get update -qq
 
-  # create and start a local traccar server
+  # Creates and starts a local traccar server. Waits a few seconds to ensure complete loading.
   - wget https://github.com/traccar/traccar/releases/download/v4.2/traccar-linux-64-4.2.zip
   - unzip traccar-linux-64-4.2.zip
   - sudo ./traccar.run
@@ -20,18 +21,15 @@ before_install:
   - sudo service traccar start
   - sleep 10
 
-  # set a token for admin account
   - cd $TRAVIS_BUILD_DIR/tests
+  # set a token for admin account
   - "curl -i '127.0.0.1:8082/api/users/1' -X PUT -u 'admin:admin' -H 'Content-Type: application/json' -d $(<admin.json)"
   # create a standard user
   - "curl -i '127.0.0.1:8082/api/users' -X POST -u 'admin:admin' -H 'Content-Type: application/json' -d $(<user.json)"
 
 install:
- - pip install requests
- - pip install pytest
-
-before_script:
  - cd $TRAVIS_BUILD_DIR
+ - pip install -r requirements.txt
 
 script:
  - python -m pytest

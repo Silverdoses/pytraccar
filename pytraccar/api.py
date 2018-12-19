@@ -10,10 +10,6 @@ class TraccarAPI:
     """Traccar v4.2 - https://www.traccar.org/api-reference/
     Abstraction for interacting with Traccar REST API.
 
-    Args:
-
-    Returns:
-
     """
 
     def __init__(self, base_url):
