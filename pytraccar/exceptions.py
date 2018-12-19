@@ -1,3 +1,6 @@
+from builtins import super  # Python 2 Support
+
+
 class TraccarApiException(Exception):
 
     def __init__(self, info):
