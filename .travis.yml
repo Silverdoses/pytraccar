@@ -24,7 +24,7 @@ install:
  - sudo mv traccar.xml /opt/traccar/conf/
 
  - cd /opt/traccar/
- - java -jar tracker-server.jar conf/traccar.xml
+ - sudo java -jar tracker-server.jar conf/traccar.xml
 
  - pip install requests
  - pip install pytest
