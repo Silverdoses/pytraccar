@@ -6,10 +6,10 @@ import pytest
 
 username, correct_password = 'admin', 'admin'
 wrong_password = 'WrongPassword'
-user_token = 'WTmx6JIlbFMIiBSfdVlGboIbFWEPwbII'
-admin_token = '7VyijDP5dicB9YQR4BbVSaZoY6kIo0lO'
+user_token = '12345678901234567890ABCDEFGHIJKL'
+admin_token = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ012345'
 invalid_token = 'ThisIsNotAValidToken'
-test_url = 'https://nextrack.com.co'
+test_url = 'http://127.0.0.1:8082'
 
 
 def test_valid_login_with_credentials():
@@ -20,7 +20,7 @@ def test_valid_login_with_credentials():
 
 def test_failed_login_with_credentials():
     with pytest.raises(ForbiddenAccessException):
-        user = user = api.TraccarAPI(base_url=test_url)
+        user = api.TraccarAPI(base_url=test_url)
         user.login_with_credentials(username, wrong_password)
 
 

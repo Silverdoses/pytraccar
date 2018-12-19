@@ -10,7 +10,7 @@ python:
   - nightly
 
 before_install:
-  - sudo apt-get update -q
+  - sudo apt-get update -qq
 
   # create and start a local traccar server
   - wget https://github.com/traccar/traccar/releases/download/v4.2/traccar-linux-64-4.2.zip
@@ -18,6 +18,12 @@ before_install:
   - sudo ./traccar.run
   - cd /opt/traccar/
   - sudo service traccar start
+
+  # set a token for admin account
+  - cd $TRAVIS_BUILD_DIR/tests
+  - "curl -i '127.0.0.1:8082/api/users/1' -X PUT -u 'admin:admin' -H 'Content-Type: application/json' -d $(<admin.json)"
+  # create a standard user
+  - "curl -i '127.0.0.1:8082/api/users' -X POST -u 'admin:admin' -H 'Content-Type: application/json' -d $(<user.json)"
 
 install:
  - pip install requests
