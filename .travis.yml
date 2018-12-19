@@ -10,11 +10,8 @@ addons:
   mariadb: 10.3
 
 before_install:
-  - sudo add-apt-repository ppa:linuxuprising/java -y
   - sudo apt-get update -q
-  - sudo apt-get install oracle-java10-installer -y
-  - sudo apt-get install oracle-java10-set-default -y
-
+  - sudo apt-get install
   - mysql -u root -e 'CREATE DATABASE traccar;'
   - mysql -u root -e "CREATE USER 'traccar'@'localhost' IDENTIFIED BY 'traccar';"
   - mysql -u root -e "GRANT ALL ON traccar.* TO 'traccar'@'localhost';"
