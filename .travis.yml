@@ -3,25 +3,19 @@ dist: xenial
 language: python
 
 python:
+  - 3.4
   - 3.5
   - 3.6
-
-addons:
-  mariadb: 10.3
+  - 3.7
+  - nightly
 
 before_install:
   - sudo apt-get update -q
-  - sudo apt-get install
-  - mysql -u root -e 'CREATE DATABASE traccar;'
-  - mysql -u root -e "CREATE USER 'traccar'@'localhost' IDENTIFIED BY 'traccar';"
-  - mysql -u root -e "GRANT ALL ON traccar.* TO 'traccar'@'localhost';"
 
+  # create and start a local traccar server
   - wget https://github.com/traccar/traccar/releases/download/v4.2/traccar-linux-64-4.2.zip
   - unzip traccar-linux-64-4.2.zip
   - sudo ./traccar.run
-  - wget https://raw.githubusercontent.com/Legacier/pytraccar/master/tests/traccar.xml
-  - sudo mv traccar.xml /opt/traccar/conf/
-
   - cd /opt/traccar/
   - sudo service traccar start
 
