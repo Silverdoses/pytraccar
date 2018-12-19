@@ -23,7 +23,7 @@ before_install:
   - sudo mv traccar.xml /opt/traccar/conf/
 
   - cd /opt/traccar/
-  - sudo java -jar tracker-server.jar conf/traccar.xml
+  - sudo service traccar start
 
 install:
  - pip install requests
