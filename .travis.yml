@@ -18,6 +18,7 @@ before_install:
   - sudo ./traccar.run
   - cd /opt/traccar/
   - sudo service traccar start
+  - sleep 10
 
   # set a token for admin account
   - cd $TRAVIS_BUILD_DIR/tests
