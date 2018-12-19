@@ -4,22 +4,18 @@
 
 
 
+## Overview
 
-
-Python interface to interact with Traccar REST API
+Python interface to interact with Traccar REST API.
 
 ## Installation
+Tested with Python 2.7, Python 3.4, Python 3.5, Python 3.6 and Python 3.7  
 
-Debian & Ubuntu (Python 2 is the defaut interpreter)
-
+Installation from source (requires git):
 ```sh
-python3 setup.py install
-```
-
-Other distros or Windows (Python 3 is the default interpreter)
-
-```sh
-python setup.py install
+$ git clone 
+$ cd pytraccar
+$ python setup.py install
 ```
 
 ## Usage example
@@ -73,3 +69,11 @@ python -m pytest
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
 [wiki]: https://github.com/yourname/yourproject/wiki
 [traccar-api-reference]: https://www.traccar.org/api-reference/
+
+## License Information
+
+**PyTraccar is built on top of code developed from/by:**
+  * Anton Tananaev, https://github.com/tananaev
+  * Traccar, https://github.com/traccar/traccar
+
+Released under the GPLv3 License
