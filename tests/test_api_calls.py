@@ -1,6 +1,10 @@
-from pytraccar.exceptions import InvalidTokenException
-from pytraccar.exceptions import ForbiddenAccessException
-from pytraccar.exceptions import UserPermissionException
+from pytraccar.exceptions import (
+    ForbiddenAccessException,
+    InvalidTokenException,
+    ObjectAlreadyExistsException,
+    ObjectNotFoundException,
+    UserPermissionException
+)
 import pytraccar.api as api
 import pytest
 
@@ -47,3 +51,43 @@ def test_user_get_all_devices():
         user = api.TraccarAPI(base_url=test_url)
         user.login_with_token(token=user_token)
         user.get_all_devices()
+
+
+def test_create_device():
+    user = api.TraccarAPI(base_url=test_url)
+    user.login_with_token(token=admin_token)
+    result = user.create_device(name='Test Device', unique_id='testdevice')
+    assert type(result) == dict
+
+
+def test_create_duplicated_device():
+    with pytest.raises(ObjectAlreadyExistsException):
+        user = api.TraccarAPI(base_url=test_url)
+        user.login_with_token(token=admin_token)
+        user.create_device(name='Test Device', unique_id='testdevice')
+
+
+def test_get_devices():
+    user = api.TraccarAPI(base_url=test_url)
+    user.login_with_token(token=admin_token)
+    result_by_user_id = user.get_devices()
+    result_by_id = user.get_devices(query='id', params=[1])
+    result_by_unique_id = user.get_devices(query='uniqueId', params=['testdevice'])
+
+    assert type(result_by_user_id) == list
+    assert type(result_by_id) == list
+    assert type(result_by_unique_id) == list
+
+
+def test_device_does_not_exist():
+    with pytest.raises(ObjectNotFoundException):
+        user = api.TraccarAPI(base_url=test_url)
+        user.login_with_token(token=admin_token)
+        user.get_devices(query='uniqueId', params=['NotADevice'])
+
+
+def test_update_device():
+    user = api.TraccarAPI(base_url=test_url)
+    user.login_with_token(token=admin_token)
+    result = user.update_device(device_id=1, name='ANewName')
+    assert type(result) == list

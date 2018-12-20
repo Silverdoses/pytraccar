@@ -13,7 +13,7 @@ Tested with Python 2.7, Python 3.4, Python 3.5, Python 3.6 and Python 3.7
 
 Installation from source (requires git):
 ```sh
-$ git clone 
+$ git clone https://github.com/Legacier/pytraccar.git
 $ cd pytraccar
 $ python setup.py install
 ```
@@ -36,25 +36,28 @@ Email and password from a standard user or admin. (default: admin)
 username, correct_password = 'admin', 'admin'
 ```
   
-Standard user token. Needed for all tests with limited user permissions.
+Standard user token. Required for all tests with limited user permissions.
 ```
 user_token = 'YOUR_TOKEN_HERE'
 ```
   
-Admin user token. Needed for all tests with admin permissions
+Admin user token. Required for all tests with admin permissions
 ```
 admin_token = 'YOUR_TOKEN_HERE'
 ```
   
 Then, run pytest to start testing.
 ```sh
-python -m pytest
+$ python -m pytest
 ```
 
-## Release History
+## Development status
 
-* 0.0.1
-    * Work in progress
+Tested
+- [x] /session 
+- [x] /users
+- [x] /devices
+- [x] /notifications
 
 ## Contributing
 
@@ -66,14 +69,12 @@ python -m pytest
 
 <!-- Markdown link & img dfn's -->
 [travis-image]: https://travis-ci.com/Legacier/pytraccar.svg?branch=master
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
+[travis-url]: https://travis-ci.com/Legacier/pytraccar
 [wiki]: https://github.com/yourname/yourproject/wiki
 [traccar-api-reference]: https://www.traccar.org/api-reference/
 
-## License Information
+## Credits
 
 **PyTraccar is built on top of code developed from/by:**
   * Anton Tananaev, https://github.com/tananaev
   * Traccar, https://github.com/traccar/traccar
-
-Released under the GPLv3 License

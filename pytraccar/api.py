@@ -35,6 +35,11 @@ class TraccarAPI:
         """ """
         return self._token
 
+    """
+    ----------------------
+    /api/session 
+    ----------------------
+    """
     def login_with_credentials(self, username, password):
         """Path: /session
         Creates a new session with user's credentials.
@@ -81,6 +86,11 @@ class TraccarAPI:
         self._token = token  # Save valid token.
         return req.json()
 
+    """
+    ----------------------
+    /api/devices 
+    ----------------------
+    """
     def get_all_devices(self):
         """Path: /devices
         Can only be used by admins or managers to fetch all entities.
@@ -179,6 +189,34 @@ class TraccarAPI:
         else:
             return req.json()
 
+    def update_device(self, device_id, name=None, unique_id=None, group_id=None,
+                      phone=None, model=None, contact=None, category=None):
+
+        # Get current device values
+        req = self.get_devices(query='id', params=device_id)
+        device_info = req[0]
+
+        update = {
+            'name': name,
+            'uniqueId': unique_id,
+            'phone': phone,
+            'model': model,
+            'contact': contact,
+            'category': category,
+            'groupId': group_id,
+        }
+
+        # Replaces all None values in the update payload by current device values:
+        data = {key: value if value is not None else device_info[key] for key, value in update.items()}
+
+        self._session.put(url=self._urls['devices'], data=data)
+
+
+    """
+    ----------------------
+    /api/notifications
+    ----------------------
+    """
     def get_all_notifications(self):
         """Path: /notifications
         Can only be used by admins or managers to fetch all entities
