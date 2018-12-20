@@ -53,8 +53,8 @@ def test_invalid_token_exception():
         user.login_with_token(token=invalid_token)
 
 
-def test_api_users(admin_session, user_session):
-    user, admin = user_session, admin_session
+def test_api_users_with_user(user_session):
+    user = user_session
 
     # Test not enough permissions
     with pytest.raises(UserPermissionException):
@@ -64,18 +64,22 @@ def test_api_users(admin_session, user_session):
     with pytest.raises(ObjectNotFoundException):
         user.get_devices(query='uniqueId', params=['NotADevice'])
 
-    task1 = admin.get_all_devices()
-    task2 = user.create_device(name='Test Device', unique_id='testdevice')
-    task3 = user.get_devices()
-    task4 = user.get_devices(query='id', params=[1])
-    task5 = user.get_devices(query='uniqueId', params=['testdevice'])
+    task1 = user.create_device(name='Test Device', unique_id='testdevice')
+    task2 = user.get_devices()
+    task3 = user.get_devices(query='id', params=[1])
+    task4 = user.get_devices(query='uniqueId', params=['testdevice'])
 
-    assert type(task1) == list
-    assert type(task2) == dict
+    assert type(task1) == dict
+    assert type(task2) == list
     assert type(task3) == list
     assert type(task4) == list
-    assert type(task5) == list
 
     # Test duplicated device
     with pytest.raises(ObjectAlreadyExistsException):
         user.create_device(name='Test Device', unique_id='testdevice')
+
+
+def test_api_users_with_admin(admin_session):
+    admin = admin_session
+    task1 = admin.get_all_devices()
+    assert type(task1) == list
