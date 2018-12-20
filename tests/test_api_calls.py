@@ -64,10 +64,10 @@ def test_api_users_with_user(user_session):
     with pytest.raises(ObjectNotFoundException):
         user.get_devices(query='uniqueId', params=['NotADevice'])
 
-    task1 = user.create_device(name='Test Device', unique_id='testdevice')
+    task1 = user.create_device(name='Test Device', unique_id='device')
     task2 = user.get_devices()
     task3 = user.get_devices(query='id', params=[1])
-    task4 = user.get_devices(query='uniqueId', params=['testdevice'])
+    task4 = user.get_devices(query='uniqueId', params=['device'])
 
     assert type(task1) == dict
     assert type(task2) == list
@@ -76,7 +76,7 @@ def test_api_users_with_user(user_session):
 
     # Test duplicated device
     with pytest.raises(ObjectAlreadyExistsException):
-        user.create_device(name='Test Device', unique_id='testdevice')
+        user.create_device(name='Test Device', unique_id='device')
 
 
 def test_api_users_with_admin(admin_session):

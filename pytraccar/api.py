@@ -142,7 +142,7 @@ class TraccarAPI:
         return req.json()
 
     def create_device(self, name, unique_id, group_id=0,
-                      phone=None, model=None, contact=None, category=None):
+                      phone='', model='', contact='', category=None):
         """Path: /devices
         Create a device. Only requires name and unique ID.
         Other params are optional.
