@@ -56,15 +56,15 @@ def test_invalid_token_exception():
 def test_api_users_with_user(user_session):
     user = user_session
 
-    # Test not enough permissions
+    # Not enough permissions
     with pytest.raises(UserPermissionException):
         user.get_all_devices()
 
-    # Test non-existent device
+    # Get non-existent device
     with pytest.raises(ObjectNotFoundException):
         user.get_devices(query='uniqueId', params=['NotADevice'])
 
-    # Create / Get
+    # Create / Get Device
     task1 = user.create_device(name='Test Device', unique_id='testdevice')
     task2 = user.get_devices()
     task3 = user.get_devices(query='id', params=[1])
@@ -81,6 +81,9 @@ def test_api_users_with_user(user_session):
 
     # Update device
     user.update_device(device_id=1, name='NewName')
+
+    # Delete Device
+    user.delete_device(device_id=1)
 
 
 def test_api_users_with_admin(admin_session):

@@ -1,4 +1,5 @@
 import requests
+import json
 from pytraccar.exceptions import (
     TraccarApiException,
     BadRequestException,
@@ -224,15 +225,24 @@ class TraccarAPI:
             'groupId': group_id,
         }
 
-        # Replaces all None values in the update payload by current device values:
-        data = {key: value if value is not None else device_info[key] for key, value in update.items()}
+        # Replaces all updated values in device_info
+        data = {key: value if update.get(key) is None else update[key] for key, value in device_info.items()}
+        headers = {'Content-Type': 'application/json'}
 
-        req = self._session.put(url=self._urls['devices'], data=data)
+        req = self._session.put('{}/{}'.format(self._urls['devices'], device_id),
+                                data=json.dumps(data), headers=headers)
+
         if req.status_code == 200:
             return req.json()
         elif req.status_code == 400:
             raise BadRequestException(message=req.text)
         else:
+            raise TraccarApiException(info=req.text)
+
+    def delete_device(self, device_id):
+        req = self._session.delete('{}/{}'.format(self._urls['devices'], device_id))
+
+        if req.status_code != 204:
             raise TraccarApiException(info=req.text)
 
     """
