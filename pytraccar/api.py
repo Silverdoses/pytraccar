@@ -209,7 +209,8 @@ class TraccarAPI:
         # Replaces all None values in the update payload by current device values:
         data = {key: value if value is not None else device_info[key] for key, value in update.items()}
 
-        self._session.put(url=self._urls['devices'], data=data)
+        req = self._session.put(url=self._urls['devices'], data=data)
+        return req.json()
 
 
     """
