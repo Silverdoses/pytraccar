@@ -1,9 +1,12 @@
 import requests
-from pytraccar.exceptions import ObjectAlreadyExistsException
-from pytraccar.exceptions import ObjectNotFoundException
-from pytraccar.exceptions import ForbiddenAccessException
-from pytraccar.exceptions import InvalidTokenException
-from pytraccar.exceptions import UserPermissionException
+from pytraccar.exceptions import (
+    TraccarApiException,
+    BadRequestException,
+    ObjectNotFoundException,
+    ForbiddenAccessException,
+    InvalidTokenException,
+    UserPermissionException
+)
 
 
 class TraccarAPI:
@@ -53,16 +56,19 @@ class TraccarAPI:
 
         Raises:
             ForbiddenAccessException: Wrong username or password.
+            TraccarApiException:
 
         """
         path = self._urls['session']
         data = {'email': username, 'password': password}
         req = self._session.post(url=path, data=data)
 
-        if req.status_code == 401:
+        if req.status_code == 200:
+            return req.json()
+        elif req.status_code == 401:
             raise ForbiddenAccessException
-
-        return req.json()
+        else:
+            raise TraccarApiException(info=req.text)
 
     def login_with_token(self, token):
         """Path: /session
@@ -75,16 +81,22 @@ class TraccarAPI:
         Returns:
           json: Session info
 
+        Raises:
+            InvalidTokenException:
+            TraccarApiException:
+
         """
         path = self._urls['session']
         data = {'token': token}
         req = self._session.get(url=path, params=data)
 
-        if req.status_code == 404:
+        if req.status_code == 200:
+            self._token = token  # Save valid token.
+            return req.json()
+        elif req.status_code == 404:
             raise InvalidTokenException
-
-        self._token = token  # Save valid token.
-        return req.json()
+        else:
+            raise TraccarApiException(info=req.text)
 
     """
     ----------------------
@@ -105,10 +117,12 @@ class TraccarAPI:
         data = {'all': True}
         req = self._session.get(url=path, params=data)
 
+        if req.status_code == 200:
+            return req.json()
         if req.status_code == 400:
             raise UserPermissionException
-
-        return req.json()
+        else:
+            raise TraccarApiException(info=req.text)
 
     def get_devices(self, query=None, params=None):
         """
@@ -136,10 +150,12 @@ class TraccarAPI:
             data = {query: params}
             req = self._session.get(url=path, params=data)
 
-            if req.status_code == 400:
-                raise ObjectNotFoundException(obj=params, obj_type='Device')
-
-        return req.json()
+        if req.status_code == 200:
+            return req.json()
+        elif req.status_code == 400:
+            raise ObjectNotFoundException(obj=params, obj_type='Device')
+        else:
+            raise TraccarApiException(info=req.text)
 
     def create_device(self, name, unique_id, group_id=0,
                       phone='', model='', contact='', category=None):
@@ -165,7 +181,7 @@ class TraccarAPI:
           json: Created device.
 
         Raises:
-          ObjectAlreadyExistsException: If device exists in database.
+          BadRequestException: If device exists in database.
 
         """
 
@@ -184,10 +200,12 @@ class TraccarAPI:
 
         req = self._session.post(url=path, json=data)
 
-        if req.status_code == 400:
-            raise ObjectAlreadyExistsException(obj=unique_id, obj_type='Device')
-        else:
+        if req.status_code == 200:
             return req.json()
+        elif req.status_code == 400:
+            raise BadRequestException(message=req.text)
+        else:
+            raise TraccarApiException(info=req.text)
 
     def update_device(self, device_id, name=None, unique_id=None, group_id=None,
                       phone=None, model=None, contact=None, category=None):
@@ -210,8 +228,12 @@ class TraccarAPI:
         data = {key: value if value is not None else device_info[key] for key, value in update.items()}
 
         req = self._session.put(url=self._urls['devices'], data=data)
-        return req.json()
-
+        if req.status_code == 200:
+            return req.json()
+        elif req.status_code == 400:
+            raise BadRequestException(message=req.text)
+        else:
+            raise TraccarApiException(info=req.text)
 
     """
     ----------------------
@@ -232,7 +254,9 @@ class TraccarAPI:
         data = {'all': True}
         req = self._session.get(url=path, params=data)
 
-        if req.status_code == 400:
+        if req.status_code == 200:
+            return req.json()
+        elif req.status_code == 400:
             raise UserPermissionException
-
-        return req.json()
+        else:
+            raise TraccarApiException(info=req.text)

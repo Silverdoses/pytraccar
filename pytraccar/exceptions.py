@@ -14,14 +14,12 @@ class TraccarApiException(Exception):
         return 'Traccar API Error: {}'.format(self.info)
 
 
-class ObjectAlreadyExistsException(TraccarApiException):
-    def __init__(self, obj, obj_type):
+class BadRequestException(TraccarApiException):
+    def __init__(self, message):
         """
         Args:
-            obj:
-            obj_type:
+            message:
         """
-        message = '[{} {} already exists]'.format(obj, obj_type)
         super().__init__(info=message)
 
 
@@ -34,7 +32,7 @@ class ObjectNotFoundException(TraccarApiException):
             obj:
             obj_type:
         """
-        message = '[{}(s) {} not found]'.format(obj, obj_type)
+        message = '[{} {} not found]'.format(obj, obj_type)
         super().__init__(info=message)
 
 
