@@ -61,15 +61,15 @@ Tested
 
 ## Contributing
 
-1. Fork it (<https://github.com/Legacier/pytraccar/fork>)
+1. Fork it (<https://github.com/Silverdoses/pytraccar/fork>)
 2. Create your feature branch (`git checkout -b feature/yourbranch`)
 3. Commit your changes (`git commit -am 'info here'`)
 4. Push to the branch (`git push origin feature/yourbranch`)
 5. Create a new Pull Request
 
 <!-- Markdown link & img dfn's -->
-[travis-image]: https://travis-ci.com/Legacier/pytraccar.svg?branch=master
-[travis-url]: https://travis-ci.com/Legacier/pytraccar
+[travis-image]: https://travis-ci.com/Silverdoses/pytraccar.svg?branch=master
+[travis-url]: https://travis-ci.com/Silverdoses/pytraccar
 [wiki]: https://github.com/yourname/yourproject/wiki
 [traccar-api-reference]: https://www.traccar.org/api-reference/
 
