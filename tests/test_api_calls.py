@@ -66,13 +66,13 @@ def test_api_users_with_user(user_session):
 
     # Create / Get Device
     task1 = user.create_device(name='Test Device', unique_id='testdevice')
-    task2 = user.get_devices()
-    task3 = user.get_devices(query='id', params=[1])
-    task4 = user.get_devices(query='uniqueId', params=['testdevice'])
-
     assert type(task1) == dict
+    device_id = task1["id"]
+    task2 = user.get_devices()
     assert type(task2) == list
+    task3 = user.get_devices(query='id', params=[device_id])
     assert type(task3) == list
+    task4 = user.get_devices(query='uniqueId', params=['testdevice'])
     assert type(task4) == list
 
     # Create duplicated device
@@ -80,10 +80,36 @@ def test_api_users_with_user(user_session):
         user.create_device(name='Test Device', unique_id='testdevice')
 
     # Update device
-    user.update_device(device_id=1, name='NewName')
+    user.update_device(device_id=device_id, name='NewName')
 
     # Delete Device
-    user.delete_device(device_id=1)
+    user.delete_device(device_id=device_id)
+
+def test_geofence(user_session):
+    user = user_session
+
+    # Not enough permissions
+    with pytest.raises(UserPermissionException):
+        user.get_all_geofences()
+
+    # Get non-existent geofence
+    with pytest.raises(ObjectNotFoundException):
+        user.get_geofences(query='deviceId', params=[9587457])
+
+    # Create / Get Geofence
+    task1 = user.create_geofence(name='Test GeoFEnce', area="POLYGON((32 35,34 35,34 37,32 37, 32 35))")
+    assert type(task1) == dict
+    geofence_id = task1["id"]
+    task2 = user.get_geofences()
+    assert type(task2) == list
+    task3 = user.get_geofences(query='id', params=[geofence_id])
+    assert type(task3) == list
+
+    # Update Geofence
+    user.update_geofence(geofence_id=geofence_id, name='NewName')
+
+    # Delete Geofence
+    user.delete_geofence(geofence_id=geofence_id)
 
 
 def test_api_users_with_admin(admin_session):
