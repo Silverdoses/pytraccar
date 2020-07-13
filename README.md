@@ -58,6 +58,7 @@ Tested
 - [x] /users
 - [x] /devices
 - [x] /notifications
+- [x] /geofences
 
 ## Contributing
 
