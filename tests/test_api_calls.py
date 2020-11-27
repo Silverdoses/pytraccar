@@ -85,6 +85,49 @@ def test_api_users_with_user(user_session):
     # Delete Device
     user.delete_device(device_id=device_id)
 
+def test_commands(user_session):
+    user = user_session
+
+    with pytest.raises(UserPermissionException):
+        user.get_all_saved_commands()
+
+    with pytest.raises(ObjectNotFoundException):
+        user.get_saved_commands(query='deviceId', params=[9288292])
+
+    #Command without deviceId
+    cmnd = user.create_saved_command(description='TestCommand', type='custom', \
+                               attributes={"data":"TestCmnd"})
+    assert type(cmnd) == dict
+
+    getCmnd = user.get_saved_command(cmnd['id'])
+    assert getCmnd == cmnd
+
+    cmnd2 = user.get_saved_commands()
+    assert type(cmnd2) == list
+
+    cmnd3 = user.get_saved_commands(query='id', params=[cmnd['id']])
+    assert type(cmnd3) == list
+
+    # Update Command
+    user.update_saved_command(command_id=cmnd['id'], description='UpdatedTestCommand')
+    updatedCommand = user.get_saved_command(cmnd['id'])
+    assert updatedCommand['description'] == 'UpdatedTestCommand'
+
+    # Delete Command
+    user.delete_saved_command(command_id=cmnd['id'])
+
+    # Dispatch a new command to device with device_id
+    #dsp1 = user.dispatch_command(device_id=38, description='DispatchTest', type='custom', attributes={"data": "DIRECTDISPATCHTEST"}) 
+
+    #dsp2 = user.dispatch_command(device_id=38, cmnd_id=command_id)
+
+    #Available Commands for a device or all possible commands
+    avlbcmd = user.get_available_commands()
+    assert type(avlbcmd) == list
+
+    #storedcmd = user.get_saved_device_supported_commands(device_id=38)
+    #assert type(storedcmd) == list
+
 def test_geofence(user_session):
     user = user_session
 
