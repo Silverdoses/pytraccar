@@ -32,6 +32,7 @@ class TraccarAPI:
             'geofences': base_url + '/api/geofences',
             'notifications': base_url + '/api/notifications',
             'reports_events': base_url + '/api/reports/events',
+            'groups': base_url + '/api/groups',
         }
         self._session = requests.Session()
 
@@ -395,6 +396,33 @@ class TraccarAPI:
 
         """
         path = self._urls['notifications']
+        data = {'all': True}
+        req = self._session.get(url=path, params=data)
+
+        if req.status_code == 200:
+            return req.json()
+        elif req.status_code == 400:
+            raise UserPermissionException
+        else:
+            raise TraccarApiException(info=req.text)
+
+
+    """
+    ----------------------
+    /api/groups
+    ----------------------
+    """
+    def get_all_groups(self):
+        """Path: /groups
+        Can only be used by admins or managers to fetch all entities
+
+        Args:
+
+        Returns:
+          json: list of Groups
+
+        """
+        path = self._urls['groups']
         data = {'all': True}
         req = self._session.get(url=path, params=data)
 
